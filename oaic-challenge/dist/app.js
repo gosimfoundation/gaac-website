@@ -1,4 +1,4 @@
-import {createEventPages} from '/event-pages.js?v=gaac-resource-whitepaper-20261105';
+import {createEventPages} from '/event-pages.js?v=gaac-prizes-20261112';
 (() => {
   'use strict';
   const app = document.querySelector('#app');

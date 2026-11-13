@@ -1,6 +1,6 @@
 # Grand Agentic AI Challenge · 智能体大奖赛
 
-A bilingual event website with a static shell and a React-enhanced liquid glass participant guide. Current public copy is based on the event introduction supplied on 2 November 2026, retained at `dist/assets/GAAC_Event_Overview_2026-11-02.txt`. GAAC is the event; OAIC is the wider industry initiative.
+A bilingual event website with a static shell and a React-enhanced liquid glass participant guide. Current public copy is based on the event introduction supplied on 2 November 2026, retained at `dist/assets/GAAC_Event_Overview_2026-11-02.txt`. Prize amounts and places were confirmed on 12 November 2026; the current download is `dist/assets/GAAC_Event_Overview_2026-11-12.txt`. GAAC is the event; OAIC is the wider industry initiative.
 
 ## Preview and validation
 
@@ -8,7 +8,7 @@ Run `npm ci` on a fresh checkout, then `npm run dev` and open `http://localhost:
 
 ## Content and navigation
 
-- `/` — event identity, purpose, US$10,000 team grand prize, 168-hour format, three applications, participation paths.
+- `/` — event identity, purpose, US$50,000 total team prizes, 168-hour format, three applications, participation paths.
 - `/challenge/` — two stages, shared EdgePod platform, three required applications and deliverables, FAQ.
 - `/resources/` — formal 100-point assessment, optional platform engineering bonus capped at 20 across the event, detailed framework, current source download.
 - `/teams/` — captain-led applications, individual registration and teammate matching, teams of three or more, participant journey and prize conditions.
@@ -21,7 +21,7 @@ The homepage hero keeps the two-column layout with the event name, one short sen
 
 ## Rules and content boundaries
 
-Each team has 168 hours. Phase one is 25 formal points; phase two comprises three required applications worth 25 each: editable PPT, financial analysis and visualization, and Deep Research. Per application, quality is 15 points, qualified efficiency 6, and reproduction/evidence 4. Optional reusable platform improvements earn up to 20 additional points overall, under separate acceptance and isolated offline work. The team grand prize is US$10,000 for one winner, subject to formal qualification, quality, safety and evidence requirements.
+Each team has 168 hours. Phase one is 25 formal points; phase two comprises three required applications worth 25 each: editable PPT, financial analysis and visualization, and Deep Research. Per application, quality is 15 points, qualified efficiency 6, and reproduction/evidence 4. Optional reusable platform improvements earn up to 20 additional points overall, under separate acceptance and isolated offline work. Team prizes total US$50,000: first prize US$20,000 for one team, second prize US$10,000 per team for two teams, and third prize US$5,000 per team for two teams. Awards remain subject to formal qualification, quality, safety and evidence requirements.
 
 Teams can have three or more members. The first edition plans to select five teams for sequential platform windows. Dates, selection, platform calendar, detailed technical rules and appeals remain subject to organizing committee announcements at `https://gaac.gosim.org/`. No registration backend or unannounced dates are invented. The brief composer runs locally and does not submit a registration.
 
