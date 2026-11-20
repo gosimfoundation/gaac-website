@@ -21,7 +21,7 @@ export function makeKit(compact) {
   function box(parent,w,h,d,mat,x=0,y=0,z=0,r=.025){return mesh(parent,cached(`b:${w}:${h}:${d}:${r}`,()=>new RoundedBoxGeometry(w,h,d,compact?2:3,Math.min(r,w/3,h/3,d/3))),mat,x,y,z);}
   function cylinder(parent,r,h,mat,x=0,y=0,z=0){return mesh(parent,cached(`c:${r}:${h}`,()=>new THREE.CylinderGeometry(r,r,h,compact?40:64)),mat,x,y,z);}
   function tube(parent,points,r,mat){const curve=points instanceof THREE.Curve?points:new THREE.CatmullRomCurve3(points.map(p=>new THREE.Vector3(...p)));const o=mesh(parent,new THREE.TubeGeometry(curve,compact?28:48,r,6,false),mat);o.userData.curve=curve;return o;}
-  // Repeated books, table cells, server trays and vents share one draw call.
+  // Repeated books and table cells share one draw call.
   function boxes(parent,items,mat){const o=new THREE.InstancedMesh(cached('unit-box',()=>new THREE.BoxGeometry(1,1,1)),mat,items.length),dummy=new THREE.Object3D();items.forEach((v,i)=>{dummy.position.set(v[0],v[1],v[2]);dummy.scale.set(v[3],v[4],v[5]);dummy.rotation.set(0,v[6]||0,0);dummy.updateMatrix();o.setMatrixAt(i,dummy.matrix);if(v[7])o.setColorAt(i,new THREE.Color(v[7]));});o.castShadow=true;o.receiveShadow=true;parent.add(o);return o;}
   function island(parent,w,d,y){const group=new THREE.Group();group.position.y=y;parent.add(group);const s=new THREE.Shape();s.moveTo(-w*.5,-d*.18);s.bezierCurveTo(-w*.56,-d*.6,-w*.13,-d*.53,w*.18,-d*.47);s.bezierCurveTo(w*.51,-d*.52,w*.56,-d*.24,w*.49,d*.11);s.bezierCurveTo(w*.53,d*.44,w*.16,d*.57,-w*.1,d*.48);s.bezierCurveTo(-w*.38,d*.5,-w*.55,d*.25,-w*.5,-d*.18);
     for(let i=0;i<3;i++){const geo=new THREE.ExtrudeGeometry(s,{depth:i?.07:.28,bevelEnabled:true,bevelSegments:3,steps:1,bevelSize:.08,bevelThickness:.05,curveSegments:compact?14:24});geo.rotateX(-Math.PI/2);const o=mesh(group,geo,i===1?materials.ice:materials.porcelain,0,i===0?0:.31+(i-1)*.12,0);o.scale.setScalar(1-i*.065);}return group;}
@@ -72,38 +72,29 @@ function library(k,parent){const m=k.materials,shelf=k.pavilion(parent,3.7,1.04,
   const sources=[];for(let i=0;i<3;i++){const card=new THREE.Group();parent.add(card);k.box(card,.6,.49,.035,m.sky);k.box(card,.54,.43,.025,m.porcelain,0,0,.028);k.box(card,.13,.21,.015,m.blue,-.15,.01,.05);for(let j=0;j<3;j++)k.box(card,.2,.02,.014,m.line,.07,.1-j*.085,.05,.004);sources.push(card);}
   const evidence=k.tube(parent,[[-1.32,1.2,.2],[-.25,1.65,.4],[1.15,1.2,.48]],.014,m.signal.clone());evidence.material.transparent=true;evidence.material.depthWrite=false;return {reports,turningPage,turningSheet,sources,evidence};
 }
-function computeCenter(k,root){const m=k.materials,node=new THREE.Group();root.add(node);node.position.set(-2.5,.08,2.4);k.cylinder(node,1.48,.22,m.porcelain,0,.12);k.cylinder(node,1.36,.1,m.ink,0,.27);k.cylinder(node,1.32,.075,m.blue,0,.36);
-  // Open front exposes the equipment. The upper annulus is a real cutaway roof.
-  const shell=k.mesh(node,new THREE.CylinderGeometry(1.24,1.24,1.53,48,1,true,Math.PI*.5,Math.PI),m.glass,0,1.16);shell.rotation.y=0;
-  const cap=k.mesh(node,new THREE.RingGeometry(1.16,1.37,64),m.porcelain,0,1.99);cap.rotation.x=-Math.PI/2;
-  k.cylinder(node,1.2,.035,m.glass,0,1.98);
-  for(const x of [-.7,.7]){k.box(node,.43,.025,.45,m.ink,x,2.025,-.2);const fan=k.mesh(node,new THREE.TorusGeometry(.14,.016,6,24),m.line,x,2.044,-.2);fan.rotation.x=-Math.PI/2;}
-  const rim=k.mesh(node,new THREE.TorusGeometry(1.3,.065,10,64),m.porcelain,0,2.0);rim.rotation.x=Math.PI/2;
-  const ring=k.mesh(node,new THREE.TorusGeometry(1.34,.025,8,64),m.signal.clone(),0,.39);ring.rotation.x=Math.PI/2;
-  const posts=[];for(let i=0;i<7;i++){const a=-Math.PI/2+i/6*Math.PI;posts.push([Math.sin(a)*1.24,1.17,-Math.cos(a)*1.24,.045,1.55,.045]);}k.boxes(node,posts,m.ink);
-  const trays=[],vents=[],status=[],serverLights=[];
-  for(let i=0;i<4;i++){const x=-.87+i*.58;k.box(node,.48,1.27,.48,m.ink,x,1.08,.28,.045);k.box(node,.39,1.16,.025,m.line,x,1.09,.535,.012);
-    for(let j=0;j<6;j++){const y=.62+j*.172;trays.push([x,y,.559,.35,.125,.026]);status.push([x+.11,y,.583,.06,.021,.012]);for(let v=0;v<4;v++)vents.push([x-.12+v*.04,y,.582,.018,.05,.014]);}
-    const light=k.box(node,.07,.024,.015,m.signal.clone(),x+.1,1.58,.59,.005);serverLights.push(light);
-    k.tube(node,[[x,.46,.57],[x,.4,.78],[x,.4,1.03],[x-.05,.4,1.2]],.018,m.line);
-    k.tube(node,[[x,1.74,.08],[x,1.85,-.36],[x,1.77,-.8],[x,.44,-.82]],.016,m.sky);
-  }
-  k.boxes(node,trays,m.ink);k.boxes(node,vents,m.sky);k.boxes(node,status,m.signal);const floor=[];for(let i=0;i<14;i++)floor.push([-.98+i*.15,.416,.5,.018,.008,1.08]);k.boxes(node,floor,m.line);
-  for(let j=0;j<4;j++)k.box(node,1.15,.06,.26,m.porcelain,0,.09+j*.08,1.58-j*.17);
-  return {node,ring,serverLights};
+function bridgePlaza(k,root){
+  const plaza=new THREE.Group();
+  plaza.position.set(-2.5,.08,2.4);
+  root.add(plaza);
+  k.cylinder(plaza,1.48,.22,k.materials.porcelain,0,.12);
+  k.cylinder(plaza,1.36,.13,k.materials.ice,0,.29);
+  k.cylinder(plaza,1.32,.10,k.materials.porcelain,0,.40);
+  k.tree(plaza,-.5,0,1.2);
+  k.tree(plaza,.3,-.55,.9);
+  return plaza;
 }
 export function buildWorld(compact=false){const root=new THREE.Group(),k=makeKit(compact),m=k.materials;
   const ppt=k.island(root,4.45,3.25,.1);ppt.position.x=-3.3;ppt.position.z=-2.3;
   const finance=k.island(root,4.3,3.25,.3);finance.position.x=3.3;finance.position.z=-2.4;
   const research=k.island(root,4.55,3.1,.03);research.position.x=3.15;research.position.z=3.15;
   const islands=[ppt,finance,research];islands.forEach((o,i)=>o.userData.island=i);
-  const work={...presentations(k,ppt),...financials(k,finance),...library(k,research),...computeCenter(k,root)};
+  const work={...presentations(k,ppt),...financials(k,finance),...library(k,research)};
   const trees=[];islands.forEach((g,i)=>{k.landscape(g,4.35,3.2);trees.push(k.tree(g,-1.78,.25,.83));trees.push(k.tree(g,1.75,-.55,.75));});
+  const plaza=bridgePlaza(k,root);
   const curves=[k.bridge(root,[-3.35,.48,1.3],[-4.25,.67,-.82]),k.bridge(root,[-1.3,.48,1.72],[1.7,.88,-1.0]),k.bridge(root,[-1.2,.48,2.9],[1.23,.55,3.1])];
   const particles=[];curves.forEach((curve,i)=>{for(let j=0;j<(compact?3:5);j++){const object=k.mesh(root,new THREE.SphereGeometry(.062,10,8),m.signal);object.castShadow=false;particles.push({object,curve,offset:j/(compact?3:5),island:i});}});
-  const labelAnchors=[];for(const [parent,position] of [[ppt,[0,3.15,-.55]],[finance,[.15,3.22,-.6]],[research,[.35,.22,1.8]],[work.node,[0,.08,1.86]]]){const anchor=new THREE.Object3D();anchor.position.set(...position);parent.add(anchor);labelAnchors.push(anchor);}
-  work.node.userData.island=3;
+  const labelAnchors=[];for(const [parent,position] of [[ppt,[0,3.15,-.55]],[finance,[.15,3.22,-.6]],[research,[.35,.22,1.8]]]){const anchor=new THREE.Object3D();anchor.position.set(...position);parent.add(anchor);labelAnchors.push(anchor);}
   const c=document.createElement('canvas');c.width=c.height=128;const ctx=c.getContext('2d'),grad=ctx.createRadialGradient(64,64,5,64,64,64);grad.addColorStop(0,'rgba(14,51,70,.48)');grad.addColorStop(.45,'rgba(21,70,91,.26)');grad.addColorStop(1,'rgba(21,70,91,0)');ctx.fillStyle=grad;ctx.fillRect(0,0,128,128);const shadowTexture=new THREE.CanvasTexture(c);
-  for(const g of [...islands,work.node]){const sh=k.mesh(root,new THREE.PlaneGeometry(g===work.node?4.6:6.2,g===work.node?4:4.9),new THREE.MeshBasicMaterial({map:shadowTexture,transparent:true,depthWrite:false}),g.position.x,-.12,g.position.z);sh.rotation.x=-Math.PI/2;sh.castShadow=sh.receiveShadow=false;sh.userData.focusOwner=g.userData.island;}
-  return {root,islands,focusTargets:[...islands,work.node],trees,particles,labelAnchors,shadowTexture,...work};
+  for(const g of [...islands,plaza]){const sh=k.mesh(root,new THREE.PlaneGeometry(g===plaza?4.6:6.2,g===plaza?4:4.9),new THREE.MeshBasicMaterial({map:shadowTexture,transparent:true,depthWrite:false}),g.position.x,-.12,g.position.z);sh.rotation.x=-Math.PI/2;sh.castShadow=sh.receiveShadow=false;sh.userData.focusOwner=g.userData.island;}
+  return {root,islands,trees,particles,labelAnchors,shadowTexture,...work};
 }

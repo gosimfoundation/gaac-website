@@ -9,7 +9,7 @@ Run `npm ci` on a fresh checkout, then `npm run dev` and open `http://localhost:
 ## Content and navigation
 
 - `/` — event identity, purpose, US$30,000 total team prizes, 168-hour format, three applications, participation paths.
-- `/challenge/` — two stages, shared EdgePod platform, three required applications and deliverables, FAQ.
+- `/challenge/` — two stages, team scheduling, three required applications and deliverables, FAQ.
 - `/resources/` — formal 100-point assessment, optional platform engineering bonus capped at 20 across the event, detailed framework, current source download.
 - `/teams/` — captain-led applications, individual registration and teammate matching, teams of three or more, participant journey and prize conditions.
 - `/partners/`, `/enterprise/`, `/research/` — resource sponsorship, enterprise scenarios and projects, research and education.
@@ -17,7 +17,7 @@ Run `npm ci` on a fresh checkout, then `npm run dev` and open `http://localhost:
 - `/involve/` — participation guidance, official event channels and local brief composer.
 - `/directions/` and `/chinese-type.html` — retained visual and typography comparison pages.
 
-The homepage hero keeps the two-column layout with the event name, one short sentence, three task labels, key facts and two links. Participant requirements, platform context and scoring details are in the sections below. The intro copy and right-hand facts panel are separate elements, so a later video treatment can keep the event text and links. Below the hero, the six participant topics appear in a glass sidebar and a live preview pane. The first topic is visible immediately. Mouse hover previews another topic after a short delay; moving into the pane preserves the selection. Click, keyboard arrows/Home/End, and previous/next buttons also work. Phones show a compact icon grid with tap selection. Sponsorship stays outside the six participant topics. A small React island uses liquid-gooey for the spring-driven merged indicator, while text remains crisp. Reduced-motion users receive a static indicator and no CSS ambient or panel animations. Legacy section links select the corresponding preview. The homepage states the full Chinese and English event name prominently. Chinese is the default; `?lang=en` selects English. Navigation preserves language and visual choices.
+The homepage hero keeps the two-column layout with the event name, one short sentence, three task labels, key facts and two links. Participant requirements, scheduling and scoring details are in the sections below. The intro copy and right-hand facts panel are separate elements, so a later video treatment can keep the event text and links. Below the hero, the six participant topics appear in a glass sidebar and a live preview pane. The first topic is visible immediately. Mouse hover previews another topic after a short delay; moving into the pane preserves the selection. Click, keyboard arrows/Home/End, and previous/next buttons also work. Phones show a compact icon grid with tap selection. Sponsorship stays outside the six participant topics. A small React island uses liquid-gooey for the spring-driven merged indicator, while text remains crisp. Reduced-motion users receive a static indicator and no CSS ambient or panel animations. Legacy section links select the corresponding preview. The homepage states the full Chinese and English event name prominently. Chinese is the default; `?lang=en` selects English. Navigation preserves language and visual choices.
 
 ## Rules and content boundaries
 
@@ -25,7 +25,7 @@ Each team has 168 hours. Phase one is 25 formal points; phase two comprises thre
 
 Teams can have three or more members. The first edition plans to select five teams for sequential platform windows. Dates, selection, platform calendar, detailed technical rules and appeals remain subject to organizing committee announcements at `https://gaac.gosim.org/`. No registration backend or unannounced dates are invented. The brief composer runs locally and does not submit a registration.
 
-The original `OAIC_Challenge_Pitch_Executive_V1.3.pptx` is explicitly archived and does not define the current scoring or registration rules.
+The original V1.3 pitch deck is archived in `../docs/`, outside the published website.
 
 ## Visual identity
 

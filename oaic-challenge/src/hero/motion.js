@@ -18,8 +18,6 @@ export function animateWorld(w,t){
   w.reports.forEach((page,i)=>{page.position.x=1.24+Math.sin(t*.8+i*.7)*.045;page.rotation.z=-.04+i*.035+Math.sin(t*.75+i*.8)*.025;});
   w.sources.forEach((card,i)=>{const u=phase(t,-i*2.8,8.4)/8.4,p=smooth(u),fade=smooth(u/.16)*(1-smooth((u-.76)/.24));card.position.set(-1.35+p*2.58,1.12+Math.sin(p*Math.PI)*.66,.1+p*.42);card.rotation.set(-.1,0,(1-p)*.15);card.scale.setScalar(.05+fade*.95);card.visible=fade>.005;});
   w.evidence.material.opacity=.24+.2*wave(t,4.2);
-  w.ring.material.emissiveIntensity=.4+.25*wave(t,3.8);
-  w.serverLights.forEach((led,i)=>led.material.emissiveIntensity=.35+.9*wave(t,2.7,i*.6));
   w.particles.forEach(({object,curve,offset,island})=>{const u=phase(t*.125+offset+island*.16,0,1);object.position.copy(curve.getPoint(u));object.position.y+=.16;object.scale.setScalar(smooth(u/.08)*(1-smooth((u-.92)/.08)));});
   w.trees.forEach((tree,i)=>tree.rotation.z=Math.sin(t*.7+i*1.2)*.02);
 }

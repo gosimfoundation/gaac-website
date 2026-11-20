@@ -84,15 +84,10 @@ html[lang="zh-CN"] .island-hero h1{font-size:clamp(38px,4.55vw,66px);letter-spac
 .hero-world-label:hover:not(:disabled),.hero-world-label[aria-pressed="true"]{background:#c5f1ff;border-color:#167f9f}
 .hero-world-label:focus-visible{outline:2px solid #102c3a;outline-offset:4px}
 .hero-world-label:disabled{opacity:1;cursor:default}
-.hero-world-label.label-compute{border-color:#80bdd0;display:flex;align-items:center;gap:7px;padding:7px 12px}
-.hero-world-label strong{font-size:12px;letter-spacing:-.02em}
-.hero-world-label.label-compute span{font-size:10px}
 .hero-world[data-focus] .hero-world-labels{display:flex;align-items:flex-start;justify-content:center;flex-wrap:wrap;gap:6px;padding:8px 6px;bottom:auto}
 .hero-world[data-focus] .hero-world-label{position:relative;left:auto!important;top:auto!important;transform:none;flex-shrink:0}
 .hero-world[data-focus] .hero-world-label:after{display:none}
-.hero-world[data-focus] .hero-world-label.label-compute{padding:6px 13px;flex-direction:row;line-height:1.35}
-.hero-world[data-focus] .hero-world-label.label-compute span{display:none}
-@media(max-width:760px){.hero-world{aspect-ratio:1.12;margin-top:18px}.hero-world-label{font-size:10px;padding:5px 9px}.hero-world-label.label-compute{gap:3px;flex-direction:column;padding:6px 10px;line-height:1.2}.hero-world-label strong{font-size:11px}.hero-world-label.label-compute span{font-size:9px}.hero-world-controls{right:8px;bottom:2px}}
+@media(max-width:760px){.hero-world{aspect-ratio:1.12;margin-top:18px}.hero-world-label{font-size:10px;padding:5px 9px}.hero-world-controls{right:8px;bottom:2px}}
 
 /* Primary event identity and optically balanced partner marks. */
 .site-header .brand{gap:20px;align-items:center}

@@ -54,7 +54,7 @@ export function mountHero(host, {lang='zh'}={}) {
       const w=label.offsetWidth,h=label.offsetHeight;
       const x=clamp((projected.x+1)*width/2,w/2+6,width-w/2-6);
       let y=clamp((1-projected.y)*height/2+(i>1?12:-12),h/2+7,height-h/2-10);
-      // Keep four concise labels readable even when the visitor rotates the model.
+      // Keep labels readable even when the visitor rotates the model.
       for(const other of placed)if(Math.abs(x-other.x)<(w+other.w)/2+5&&Math.abs(y-other.y)<(h+other.h)/2+6)y=clamp(other.y+(y<other.y?-1:1)*((h+other.h)/2+10),h/2+7,height-h/2-10);
       label.style.left=x+'px';label.style.top=y+'px';placed.push({x,y,w,h});
     });
@@ -66,7 +66,7 @@ export function mountHero(host, {lang='zh'}={}) {
     const orientation=new THREE.Quaternion().setFromRotationMatrix(new THREE.Matrix4().lookAt(
       new THREE.Vector3(Math.sin(view.azimuth)*Math.cos(view.pitch),Math.sin(view.pitch),Math.cos(view.azimuth)*Math.cos(view.pitch)),new THREE.Vector3(),new THREE.Vector3(0,1,0)));
     const inverse=orientation.clone().invert(),point=new THREE.Vector3(),box=new THREE.Box3();
-    return world.focusTargets.map(group=>{
+    return world.islands.map(group=>{
       const bounds=new THREE.Box3();
       group.traverse(mesh=>{if(!mesh.isMesh)return;box.setFromObject(mesh);for(const x of [box.min.x,box.max.x])for(const y of [box.min.y,box.max.y])for(const z of [box.min.z,box.max.z])bounds.expandByPoint(point.set(x,y,z).applyQuaternion(inverse));});
       return {center:bounds.getCenter(new THREE.Vector3()).applyQuaternion(orientation),size:bounds.getSize(new THREE.Vector3()),up:new THREE.Vector3(0,1,0).applyQuaternion(orientation)};
@@ -79,7 +79,7 @@ export function mountHero(host, {lang='zh'}={}) {
     // Reserve space for the destination switcher and overview control.
     // The roof/courtyard bounds contain empty corner space; use that space for
     // a closer view while retaining the full island width on narrow screens.
-    zoomGoal=Math.min(3.5,(camera.right-camera.left)*(1-40/width)/frame.size.x,(camera.top-camera.bottom)*(1-100/height)*(focus===3?1.12:1.22)/frame.size.y);
+    zoomGoal=Math.min(3.5,(camera.right-camera.left)*(1-40/width)/frame.size.x,(camera.top-camera.bottom)*(1-100/height)*1.22/frame.size.y);
     targetGoal.copy(frame.center).addScaledVector(frame.up,.12);
   }
   function updateCamera(dt) {
@@ -115,7 +115,7 @@ export function mountHero(host, {lang='zh'}={}) {
   labels.forEach((label,i)=>listen(label,'click',()=>setFocus(focus===i?-1:i)));
   listen(reset,'click',()=>{yawGoal=0;pitchGoal=view.pitch;velocity=0;setFocus(-1);reset.hidden=true;});
   const raycaster=new THREE.Raycaster();
-  function pick(e){const rect=canvas.getBoundingClientRect();raycaster.setFromCamera(new THREE.Vector2((e.clientX-rect.left)/rect.width*2-1,-(e.clientY-rect.top)/rect.height*2+1),camera);const hits=raycaster.intersectObjects(focus<0?world.focusTargets:[world.focusTargets[focus]],true);if(hits.length){let o=hits[0].object;while(o&&o.userData.island===undefined)o=o.parent;if(o)setFocus(focus===o.userData.island?-1:o.userData.island);}else setFocus(-1);}
+  function pick(e){const rect=canvas.getBoundingClientRect();raycaster.setFromCamera(new THREE.Vector2((e.clientX-rect.left)/rect.width*2-1,-(e.clientY-rect.top)/rect.height*2+1),camera);const hits=raycaster.intersectObjects(focus<0?world.islands:[world.islands[focus]],true);if(hits.length){let o=hits[0].object;while(o&&o.userData.island===undefined)o=o.parent;if(o)setFocus(focus===o.userData.island?-1:o.userData.island);}else setFocus(-1);}
   function hover(e){
     if(e.pointerType!=='mouse'||e.buttons||dragging||reduced.matches||e.target.closest('button'))return;
     const rect=host.getBoundingClientRect(),x=clamp((e.clientX-rect.left)/rect.width,0,1)*2-1,y=clamp((e.clientY-rect.top)/rect.height,0,1)*2-1;
